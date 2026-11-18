@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:suapin_mobile/modules/gamification/dashboard.dart';
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
 import 'modules/social/social_screen.dart';
@@ -214,6 +215,11 @@ class DashboardView extends StatelessWidget {
               title: 'Gamifikasi & Level',
               subtitle: 'Kumpulkan XP, naikkan level, dan raih lencana',
               color: Colors.amber.shade800,
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const DashboardPage())
+                );
+              }
             ),
             _buildModuleCard(
               context,
@@ -251,6 +257,7 @@ class DashboardView extends StatelessWidget {
     required String subtitle,
     required Color color,
     int? tabIndex, // tab tujuan di bottom navigation; null = modul belum punya halaman
+    VoidCallback? onTap, // aksi khusus (contoh: Gamifikasi membuka halamannya sendiri)
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12.0),
@@ -268,7 +275,9 @@ class DashboardView extends StatelessWidget {
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
         onTap: () {
-          if (tabIndex != null) {
+          if (onTap != null) {
+            onTap();
+          } else if (tabIndex != null) {
             onOpenTab(tabIndex);
           } else {
             ScaffoldMessenger.of(context)
