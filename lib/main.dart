@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'modules/authentication/profile_screen.dart';
 
 void main() {
   runApp(const SuapinApp());
@@ -39,7 +40,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     ScannerPlaceholderView(),
     LeaderboardPlaceholderView(),
     ChallengePlaceholderView(),
-    ProfilePlaceholderView(),
+    ProfileScreen(),
   ];
 
   @override
@@ -293,16 +294,3 @@ class ChallengePlaceholderView extends StatelessWidget {
   }
 }
 
-class ProfilePlaceholderView extends StatelessWidget {
-  const ProfilePlaceholderView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
-      body: const Center(
-        child: Text('Modul Autentikasi & Profil Pengguna'),
-      ),
-    );
-  }
-}
