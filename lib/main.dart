@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
+import 'modules/story/story_screen.dart';
 
 void main() {
   runApp(const SuapinApp());
@@ -218,6 +219,13 @@ class DashboardView extends StatelessWidget {
               title: 'Story Progression & Duel 1v1',
               subtitle: 'Buka bab komik digital dan tantang teman',
               color: Colors.teal.shade700,
+              onTap: () {
+                Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                builder: (_) => const StoryScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -231,6 +239,7 @@ class DashboardView extends StatelessWidget {
     required String title,
     required String subtitle,
     required Color color,
+    VoidCallback? onTap,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12.0),
@@ -247,7 +256,7 @@ class DashboardView extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-        onTap: () {},
+        onTap: onTap ?? () {},
       ),
     );
   }
