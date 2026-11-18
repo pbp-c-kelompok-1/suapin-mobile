@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'modules/authentication/profile_screen.dart';
+import 'modules/scanner/scanner_screen.dart';
 
 void main() {
   runApp(const SuapinApp());
@@ -37,7 +38,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   static const List<Widget> _pages = [
     DashboardView(),
-    ScannerPlaceholderView(),
+    ScannerScreen(),
     LeaderboardPlaceholderView(),
     ChallengePlaceholderView(),
     ProfileScreen(),
@@ -247,20 +248,6 @@ class DashboardView extends StatelessWidget {
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
         onTap: () {},
-      ),
-    );
-  }
-}
-
-class ScannerPlaceholderView extends StatelessWidget {
-  const ScannerPlaceholderView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('FoodScan AI')),
-      body: const Center(
-        child: Text('Modul FoodScan AI (Scanner)'),
       ),
     );
   }
