@@ -6,6 +6,7 @@ import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
 import 'modules/social/social_screen.dart';
 import 'modules/story/story_screen.dart';
+import 'modules/challenge/screens/mission_page.dart';
 
 void main() {
   runApp(const SuapinApp());
@@ -61,7 +62,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       DashboardView(onOpenTab: _openTab),
       const ScannerScreen(),
       const SocialScreen(),
-      const ChallengePlaceholderView(),
+      const MissionPage(),
       const ProfileScreen(),
     ];
 
@@ -300,17 +301,5 @@ class DashboardView extends StatelessWidget {
   }
 }
 
-class ChallengePlaceholderView extends StatelessWidget {
-  const ChallengePlaceholderView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Tantangan')),
-      body: const Center(
-        child: Text('Modul Tantangan & Laporan Mingguan'),
-      ),
-    );
-  }
 }
 
