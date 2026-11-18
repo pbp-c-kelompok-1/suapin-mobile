@@ -5,6 +5,7 @@ import 'package:suapin_mobile/modules/gamification/dashboard.dart';
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
 import 'modules/social/social_screen.dart';
+import 'modules/story/story_screen.dart';
 
 void main() {
   runApp(const SuapinApp());
@@ -243,6 +244,13 @@ class DashboardView extends StatelessWidget {
               title: 'Story Progression & Duel 1v1',
               subtitle: 'Buka bab komik digital dan tantang teman',
               color: Colors.teal.shade700,
+              onTap: () {
+                Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                builder: (_) => const StoryScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),
