@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:suapin_mobile/modules/gamification/dashboard.dart';
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
 
@@ -197,6 +198,11 @@ class DashboardView extends StatelessWidget {
               title: 'Gamifikasi & Level',
               subtitle: 'Kumpulkan XP, naikkan level, dan raih lencana',
               color: Colors.amber.shade800,
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const DashboardPage())
+                );
+              }
             ),
             _buildModuleCard(
               context,
@@ -231,6 +237,7 @@ class DashboardView extends StatelessWidget {
     required String title,
     required String subtitle,
     required Color color,
+    VoidCallback? onTap,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12.0),
@@ -247,7 +254,7 @@ class DashboardView extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-        onTap: () {},
+        onTap: onTap ?? () {},
       ),
     );
   }
