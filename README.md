@@ -134,6 +134,36 @@ Integrasi data antara aplikasi mobile Flutter dan backend web Django (PWS) berja
 5. **Deserialisasi & Tampilan Antarmuka:**
    Aplikasi Flutter mengolah (*parse*) string respons JSON menjadi objek model Dart yang *type-safe*, kemudian memperbarui *state* aplikasi sehingga antarmuka widget (Material 3) menampilkan data terbaru secara instan kepada pengguna.
 
+### 🌐 Daftar Endpoint Django REST Framework per Modul
+
+Berikut daftar endpoint API backend Django yang diintegrasikan oleh aplikasi mobile Suap.in:
+
+| Modul | Endpoint | Method | Keterangan Fungsi |
+|---|---|:---:|---|
+| **Authentication** | `/auth/login/` | `POST` | Autentikasi dan masuk ke akun pengguna |
+| | `/auth/register/` | `POST` | Pendaftaran akun baru pengguna |
+| | `/auth/logout/` | `POST` | Keluar dari sesi login aktif |
+| | `/auth/profile/<username>/` | `GET` | Mengambil data profil dan avatar pengguna |
+| **Scanner** | `/scanner/api/budget/` | `GET` | Mengambil data batas anggaran karbon harian & pemakaian |
+| | `/scanner/api/items/` | `GET` | Mengambil daftar katalog emisi makanan |
+| | `/scanner/api/logs/` | `GET` | Mengambil riwayat log makanan pengguna |
+| | `/scanner/save/` | `POST` | Menyimpan catatan makanan ke log harian |
+| **Gamification** | `/api/badges/` | `GET` | Mengambil seluruh daftar lencana yang tersedia |
+| | `/api/user/badges/` | `GET` | Mengambil koleksi lencana milik pengguna |
+| | `/api/user/game_profile` | `GET` | Mengambil progres level, XP, dan status streak |
+| **Social** | `/social/api/leaderboard/` | `GET` | Mengambil peringkat emisi (filter teman/fakultas/kampus) |
+| | `/social/api/campus-war/` | `GET` | Mengambil klasemen perolehan skor Campus War |
+| | `/social/api/friends/` | `GET` | Mengambil daftar teman dan pencarian akun |
+| | `/social/api/friends/request/` | `POST` | Mengirim permintaan pertemanan baru |
+| | `/social/api/friends/<pk>/respond/` | `POST` | Menerima atau menolak permintaan pertemanan |
+| **Challenge** | `/challenge/api/daily/` | `GET` | Mengambil daftar misi harian (Daily Quests) |
+| | `/challenge/claim-quest/` | `POST` | Mengklaim hadiah XP misi harian yang selesai |
+| | `/challenge/api/data/` | `GET` | Mengambil ringkasan progres dan status tantangan |
+| | `/challenge/report/` | `GET` | Mengambil ringkasan laporan jejak karbon mingguan |
+| **Story** | `/story/` | `GET` | Mengambil daftar bab komik edukatif dan status terbukanya |
+| | `/story/<bab>/` | `GET` | Membaca isi bab komik edukasi per level |
+| | `/story/challenges/` | `GET` | Mengambil daftar duel 1v1 dengan teman |
+
 ---
 
 ## 🎨 Tautan Desain Figma (UI/UX)
