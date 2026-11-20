@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
 import 'modules/story/story_screen.dart';
@@ -12,17 +15,20 @@ class SuapinApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Suap.in',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF16A34A),
-          brightness: Brightness.light,
+    return Provider<CookieRequest>(
+      create: (_) => CookieRequest(),
+      child: MaterialApp(
+        title: 'Suap.in',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF16A34A),
+            brightness: Brightness.light,
+          ),
         ),
+        home: const MainNavigationScreen(),
       ),
-      home: const MainNavigationScreen(),
     );
   }
 }
@@ -137,40 +143,63 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(height: 8),
                   const Text(
                     'Foto makananmu hari ini dan lacak emisi karbon porsi harianmu.',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Row(
                           children: [
-                            Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 18),
+                            Icon(
+                              Icons.local_fire_department,
+                              color: Colors.orangeAccent,
+                              size: 18,
+                            ),
                             SizedBox(width: 4),
-                            Text('Streak: 3 Hari', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                            Text(
+                              'Streak: 3 Hari',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(width: 10),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Row(
                           children: [
-                            Icon(Icons.eco, color: Colors.lightGreenAccent, size: 18),
+                            Icon(
+                              Icons.eco,
+                              color: Colors.lightGreenAccent,
+                              size: 18,
+                            ),
                             SizedBox(width: 4),
-                            Text('Tunas', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                            Text(
+                              'Tunas',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -182,7 +211,9 @@ class DashboardView extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               'Modul Suap.in Mobile',
-              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 12),
             _buildModuleCard(
@@ -221,9 +252,7 @@ class DashboardView extends StatelessWidget {
               color: Colors.teal.shade700,
               onTap: () {
                 Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                builder: (_) => const StoryScreen(),
-                  ),
+                  MaterialPageRoute<void>(builder: (_) => const StoryScreen()),
                 );
               },
             ),
@@ -254,7 +283,10 @@ class DashboardView extends StatelessWidget {
           child: Icon(icon, color: color),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+        ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
         onTap: onTap ?? () {},
       ),
@@ -269,9 +301,7 @@ class LeaderboardPlaceholderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Leaderboard')),
-      body: const Center(
-        child: Text('Modul Leaderboard & Campus War'),
-      ),
+      body: const Center(child: Text('Modul Leaderboard & Campus War')),
     );
   }
 }
@@ -283,10 +313,7 @@ class ChallengePlaceholderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tantangan')),
-      body: const Center(
-        child: Text('Modul Tantangan & Laporan Mingguan'),
-      ),
+      body: const Center(child: Text('Modul Tantangan & Laporan Mingguan')),
     );
   }
 }
-
