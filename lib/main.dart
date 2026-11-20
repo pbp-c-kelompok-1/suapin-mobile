@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-
+import 'package:suapin_mobile/modules/gamification/dashboard.dart';
 import 'modules/authentication/profile_screen.dart';
 import 'modules/scanner/scanner_screen.dart';
+import 'modules/social/social_screen.dart';
 import 'modules/story/story_screen.dart';
 
 void main() {
@@ -15,6 +16,8 @@ class SuapinApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Satu CookieRequest dibagikan ke seluruh aplikasi lewat Provider, supaya cookie login
+    // (sessionid Django) dipakai bersama oleh semua modul saat memanggil web service.
     return Provider<CookieRequest>(
       create: (_) => CookieRequest(),
       child: MaterialApp(
@@ -43,25 +46,30 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = [
-    DashboardView(),
-    ScannerScreen(),
-    LeaderboardPlaceholderView(),
-    ChallengePlaceholderView(),
-    ProfileScreen(),
-  ];
+  /// Pindah tab bottom navigation. Dipakai oleh NavigationBar dan kartu modul di Home.
+  void _openTab(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Daftar halaman dibuat di build() (bukan static const) supaya Home bisa
+    // menerima callback _openTab untuk berpindah tab.
+    final List<Widget> pages = [
+      DashboardView(onOpenTab: _openTab),
+      const ScannerScreen(),
+      const SocialScreen(),
+      const ChallengePlaceholderView(),
+      const ProfileScreen(),
+    ];
+
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onDestinationSelected: _openTab,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
@@ -95,7 +103,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 }
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({super.key});
+  /// Callback dari MainNavigationScreen untuk berpindah tab bottom navigation.
+  final ValueChanged<int> onOpenTab;
+
+  const DashboardView({super.key, required this.onOpenTab});
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +233,7 @@ class DashboardView extends StatelessWidget {
               title: 'FoodScan AI & Karbon',
               subtitle: 'Lacak jejak karbon dari makanan Indonesia',
               color: const Color(0xFF16A34A),
+              tabIndex: 1, // Scan
             ),
             _buildModuleCard(
               context,
@@ -229,6 +241,11 @@ class DashboardView extends StatelessWidget {
               title: 'Gamifikasi & Level',
               subtitle: 'Kumpulkan XP, naikkan level, dan raih lencana',
               color: Colors.amber.shade800,
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const DashboardPage())
+                );
+              }
             ),
             _buildModuleCard(
               context,
@@ -236,6 +253,7 @@ class DashboardView extends StatelessWidget {
               title: 'Leaderboard & Campus War',
               subtitle: 'Peringkat teman dan kompetisi kampus',
               color: Colors.blue.shade700,
+              tabIndex: 2, // Peringkat
             ),
             _buildModuleCard(
               context,
@@ -243,6 +261,7 @@ class DashboardView extends StatelessWidget {
               title: 'Tantangan Harian & Laporan',
               subtitle: 'Selesaikan misi ramah lingkungan tiap hari',
               color: Colors.purple.shade700,
+              tabIndex: 3, // Tantangan
             ),
             _buildModuleCard(
               context,
@@ -268,7 +287,8 @@ class DashboardView extends StatelessWidget {
     required String title,
     required String subtitle,
     required Color color,
-    VoidCallback? onTap,
+    int? tabIndex, // tab tujuan di bottom navigation; null = modul belum punya halaman
+    VoidCallback? onTap, // aksi khusus (contoh: Gamifikasi membuka halamannya sendiri)
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12.0),
@@ -288,20 +308,20 @@ class DashboardView extends StatelessWidget {
           style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-        onTap: onTap ?? () {},
+        onTap: () {
+          if (onTap != null) {
+            onTap();
+          } else if (tabIndex != null) {
+            onOpenTab(tabIndex);
+          } else {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text('$title belum tersedia di versi mobile.')),
+              );
+          }
+        },
       ),
-    );
-  }
-}
-
-class LeaderboardPlaceholderView extends StatelessWidget {
-  const LeaderboardPlaceholderView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Leaderboard')),
-      body: const Center(child: Text('Modul Leaderboard & Campus War')),
     );
   }
 }
