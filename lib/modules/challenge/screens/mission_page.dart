@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 import '../models/quest.dart';
 import '../services/api_client.dart';
@@ -32,7 +34,7 @@ class MissionPage extends StatefulWidget {
 }
 
 class _MissionPageState extends State<MissionPage> {
-  final _api = ApiClient();
+  late final ApiClient _api;
   DailyData? _data;
   bool _loading = true;
   bool _offline = false;
@@ -40,6 +42,7 @@ class _MissionPageState extends State<MissionPage> {
   @override
   void initState() {
     super.initState();
+    _api = ApiClient(context.read<CookieRequest>());
     _load();
   }
 
@@ -111,7 +114,6 @@ class _MissionPageState extends State<MissionPage> {
                 ),
               ),
       ),
-      bottomNavigationBar: _bottomNav(),
     );
   }
 
@@ -248,20 +250,4 @@ class _MissionPageState extends State<MissionPage> {
         ],
       );
 
-  // Navigasi bawah mengikuti wireframe (Home, Misi, Scan, Laporan, Profil).
-  Widget _bottomNav() => NavigationBar(
-        selectedIndex: 1,
-        indicatorColor: const Color(0xFFC0F5F2),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-          NavigationDestination(
-              icon: Icon(Icons.assignment_outlined), label: 'Misi'),
-          NavigationDestination(
-              icon: Icon(Icons.document_scanner_outlined), label: 'Scan'),
-          NavigationDestination(
-              icon: Icon(Icons.bookmark_border), label: 'Laporan'),
-          NavigationDestination(
-              icon: Icon(Icons.person_outline), label: 'Profil'),
-        ],
-      );
 }

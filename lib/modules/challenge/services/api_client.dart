@@ -1,44 +1,33 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
+import '../../social/social_config.dart';
 import '../models/quest.dart';
 
-/// Penghubung ke web app Django (DRF).
-
+/// Penghubung ke web app Django (modul challenge).
+/// Pake CookieRequest yang sama dengan modul lain, jadi login sessionid ikut terkirim.
 class ApiClient {
-  final String baseUrl;
-  final String token;
+  final CookieRequest request;
 
-  ApiClient({String? baseUrl, String? token})
-      : baseUrl = baseUrl ??
-            const String.fromEnvironment('API_BASE',
-                defaultValue: 'http://10.0.2.2:8000'),
-        token = token ?? const String.fromEnvironment('API_TOKEN');
+  const ApiClient(this.request);
 
-  Map<String, String> get _headers => {
-        'Accept': 'application/json',
-        if (token.isNotEmpty) 'Authorization': 'Token $token',
-      };
+  String _url(String path) => '${SocialConfig.baseUrl}/challenge/$path';
 
   Future<DailyData> fetchDaily() async {
-    final res = await http
-        .get(Uri.parse('$baseUrl/api/challenge/daily/'), headers: _headers)
-        .timeout(const Duration(seconds: 8));
-    if (res.statusCode != 200) {
-      throw Exception('Gagal memuat misi (HTTP ${res.statusCode})');
+    final dynamic res = await request.get(_url('api/daily/'));
+    if (res is! Map<String, dynamic>) {
+      throw Exception('Format data dari server tidak dikenali.');
     }
-    return DailyData.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    return DailyData.fromJson(res);
   }
 
   Future<void> claimQuest(String questId) async {
-    final res = await http
-        .post(Uri.parse('$baseUrl/api/challenge/daily/$questId/claim/'),
-            headers: _headers)
-        .timeout(const Duration(seconds: 8));
-    if (res.statusCode != 201) {
-      final body = jsonDecode(res.body) as Map<String, dynamic>;
-      throw Exception(body['detail'] ?? 'Gagal klaim (HTTP ${res.statusCode})');
-    }
+    final dynamic res = await request.postJson(
+      _url('claim-quest/'),
+      jsonEncode({'quest_id': questId}),
+    );
+    if (res is Map && res['ok'] == true) return;
+    throw Exception(res is Map ? (res['message'] ?? 'Gagal klaim.') : 'Gagal klaim.');
   }
 }
